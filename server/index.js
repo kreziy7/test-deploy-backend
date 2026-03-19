@@ -11,9 +11,15 @@ app.use(cors());
 app.use(express.json());
 
 // Database connection configuration
+// Can use individual variables or a single DATABASE_URL
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL?.includes('sslmode=require') || process.env.NODE_ENV === 'production'
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.DB_NAME || 'postgres',
+    password: process.env.DB_PASSWORD || 'password',
+    port: process.env.DB_PORT || 5432,
+    connectionString: process.env.DATABASE_URL, // Optional: if provided, this overrides individual settings
+    ssl: (process.env.DATABASE_URL?.includes('sslmode=require') || process.env.NODE_ENV === 'production')
         ? { rejectUnauthorized: false }
         : false
 });
